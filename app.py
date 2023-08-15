@@ -50,5 +50,3 @@ def review_summary(reviews):
 
 if __name__ == '__main__':
     app.run(debug = True)
-
-# Homewood%20Suites%20by%20Hilton%20Newark-Fremont
