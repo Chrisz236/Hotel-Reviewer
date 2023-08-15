@@ -9,5 +9,5 @@ A Python Flask API endpoint to query the hotel with name and city, get its revie
 * Start service with `python3 app.py`
 
 ## Usage
-`GET`: `http://{server-ip}:4878/reviews?hotel={hotel_name_in_url_format_encoded}`
-e.g. `http://127.0.0.1:4878/reviews?hotel=Four%20Seasons%20Hotel%20San%20Francisco`
+`GET` method: `http://{server-ip}:4878/reviews?hotel={hotel_name_in_url_format_encoded}`
+* e.g. `http://127.0.0.1:4878/reviews?hotel=Four%20Seasons%20Hotel%20San%20Francisco`
