@@ -31,7 +31,9 @@
 
 * **Notes:**
 
-  Retry if return `500` error code.
+  The service will spawn on port `4878`
+
+  Retry if you encounter `500` error code
 
 
 ## Setup
