@@ -5,12 +5,13 @@
 # Version: 1.0
 # Description: Send request to TripAdvisor website and get first 10 reviews
 
+import os
 import requests
 from urllib.parse import quote
 from bs4 import BeautifulSoup
 
 # developing only
-TRIP_ARVISOR_API_KEY = "576E1C52C5144AB7A7D74D62E09E7A36"
+TRIP_ARVISOR_API_KEY = os.getenv("TRIP_ADVISOR_API_KEY")
 
 def get_location_id_by_name(name):
     """Get location_id of given hotel name
@@ -63,7 +64,3 @@ def get_reviews_by_name(hotel_name):
     ][:5]
 
     return "\n\n".join(reviews)
-
-
-if __name__ == '__main__':
-    get_reviews_by_name("Homewood Suites by Hilton Newark-Fremont")
