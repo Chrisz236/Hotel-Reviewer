@@ -36,6 +36,18 @@ def get_location_id_by_name(name):
 
 
 def get_reviews_by_name(hotel_name):
+    """Get reviews by given hotel name
+
+        Parameters
+        ----------
+        hotel_name : str
+            Hotel name for query
+        
+        Returns
+        -------
+        reviews : str
+            latest reviews for given hotel name
+    """
     location_id = get_location_id_by_name(hotel_name)
     url = f"https://www.tripadvisor.com/Hotel_Review-d{location_id}.html"
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -44,8 +56,14 @@ def get_reviews_by_name(hotel_name):
     html_content = response.content
 
     soup = BeautifulSoup(html_content, 'html.parser')
-    print((f'\n\n{"-"*130}\n\n').join([f'[Review ID: {i}] --> [{u}]\n{r}' for i, u, r in [(rev.get("data-reviewid"), rev.parent.div.get_text(" "), rev.get_text("\n", strip=True) 
-    ) for rev in soup.select('div[data-test-target] > div[data-reviewid]')]]))
+
+    reviews = [
+        rev.get_text("\n", strip=True)
+        for rev in soup.select('div[data-test-target] > div[data-reviewid]')
+    ][:5]
+
+    return "\n\n".join(reviews)
+
 
 if __name__ == '__main__':
     get_reviews_by_name("Homewood Suites by Hilton Newark-Fremont")
