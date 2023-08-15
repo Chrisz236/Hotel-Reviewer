@@ -45,7 +45,7 @@ def review_summary(reviews):
         messages=[
             {
                 "role": "system",
-                "content": "You are a highly skilled AI trained in language comprehension and summarization. I would like you to read the following text and summarize it into a concise abstract paragraph. Aim to retain the most important points, providing a coherent and readable summary that could help a person understand the main points of the discussion without needing to read the entire text. Please avoid unnecessary details or tangential points."
+                "content": "You are a highly skilled AI trained in language comprehension and summarization about few hotel's review from different sources. I would like you to read the following reviews and summarize it into a concise single review about this place. Aim to retain the most important points, providing a coherent and readable summary that could help a person understand the pros and cons of this place and avoid using [some people say xxx, other people say xxx], but like you have been there on your own. Please avoid unnecessary details or tangential points."
             },
             {
                 "role": "user",
