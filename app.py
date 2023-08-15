@@ -15,6 +15,13 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/reviews', methods=['GET'])
 def summary():
+    """API end-point
+
+        Returns
+        -------
+        summarized_reviews : str
+            single paragraph of summary
+    """
     hotel_name = request.args.get('hotel', '')
     reviews = get_reviews_by_name(hotel_name)
     return review_summary(reviews)
@@ -49,4 +56,4 @@ def review_summary(reviews):
     return response['choices'][0]['message']['content']
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', debug=True)
