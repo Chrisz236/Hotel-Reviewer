@@ -56,4 +56,8 @@ def review_summary(reviews):
     return response['choices'][0]['message']['content']
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(
+        host='0.0.0.0',
+        port=4878,
+        debug=True
+    )
