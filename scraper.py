@@ -7,13 +7,13 @@
 
 import os
 import requests
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 from bs4 import BeautifulSoup
 
 # developing only
 TRIP_ARVISOR_API_KEY = os.getenv("TRIP_ADVISOR_API_KEY")
 
-def get_location_id_by_name(name):
+def get_location_id_by_name_and_address(name, address):
     """Get location_id of given hotel name
 
         Parameters
@@ -27,7 +27,9 @@ def get_location_id_by_name(name):
             location_id of given hotel name
     """
     hotel_name = quote(name)
-    url = f"https://api.content.tripadvisor.com/api/v1/location/search?key={TRIP_ARVISOR_API_KEY}&searchQuery={hotel_name}&category=hotels&language=en"
+    address = quote(unquote(address).split(',', 1)[0])
+
+    url = f"https://api.content.tripadvisor.com/api/v1/location/search?key={TRIP_ARVISOR_API_KEY}&searchQuery={hotel_name}&category=hotels&address={address}&language=en"
     headers = {"accept": "application/json"}
 
     response = requests.get(url, headers=headers)
@@ -36,7 +38,7 @@ def get_location_id_by_name(name):
     return str(json_data["data"][0]["location_id"])
 
 
-def get_reviews_by_name(hotel_name):
+def get_reviews_by_name_and_address(hotel_name, address):
     """Get reviews by given hotel name
 
         Parameters
@@ -49,7 +51,7 @@ def get_reviews_by_name(hotel_name):
         reviews : str
             latest reviews for given hotel name
     """
-    location_id = get_location_id_by_name(hotel_name)
+    location_id = get_location_id_by_name_and_address(hotel_name, address)
     url = f"https://www.tripadvisor.com/Hotel_Review-d{location_id}.html"
     headers = {'User-Agent': 'Mozilla/5.0'}
 
