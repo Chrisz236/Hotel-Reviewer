@@ -17,6 +17,8 @@
 
     `address=[string]`
 
+    `city=[string]`
+
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -29,7 +31,7 @@
 
 * **Sample Call:**
 
-  `curl /reviews?hotel=Hotel%20Name%20Goes%20Here&address=Address%20Goes%20Here`
+  `curl /reviews?hotel={hotel_name}&address={address}&city={city}`
 
 * **Notes:**
 
