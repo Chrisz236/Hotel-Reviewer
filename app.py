@@ -11,7 +11,6 @@ from scraper import get_reviews_by_name_address_city
 
 app = Flask(__name__)
 
-debug = True
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/reviews', methods=['GET'])
@@ -27,9 +26,6 @@ def summary():
     address = request.args.get('address', '')
     city = request.args.get('city', '')
     reviews = get_reviews_by_name_address_city(hotel_name, address, city)
-
-    if debug:
-        print(f"[Reviews for {hotel_name} at {address}]\n{reviews}")
 
     return review_summary(reviews)
 
