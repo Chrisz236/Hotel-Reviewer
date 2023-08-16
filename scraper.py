@@ -11,7 +11,8 @@ from urllib.parse import quote, unquote
 from bs4 import BeautifulSoup
 from rapidfuzz import fuzz
 
-# developing only
+debug = True
+
 TRIP_ARVISOR_API_KEY = os.getenv("TRIP_ADVISOR_API_KEY")
 
 def get_location_id_by_name_address_city(name, address, city):
@@ -45,7 +46,6 @@ def get_location_id_by_name_address_city(name, address, city):
     for i in range(len(json_data["data"])):
         # quick filter for city match
         if json_data["data"][i]["address_obj"]["city"].lower() == city.lower():
-
             similarity = fuzz.ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
             if similarity > address_match_score:
                 location_id = json_data["data"][i]["location_id"]
@@ -54,7 +54,7 @@ def get_location_id_by_name_address_city(name, address, city):
     return location_id
 
 
-def get_reviews_by_name_address_city(hotel_name, address):
+def get_reviews_by_name_address_city(hotel_name, address, city):
     """Get reviews by given hotel name
 
         Parameters
@@ -81,7 +81,16 @@ def get_reviews_by_name_address_city(hotel_name, address):
         for rev in soup.select('div[data-test-target] > div[data-reviewid]')
     ][:5]
 
-    return "\n\n".join(reviews)
+    result = "\n\n".join(reviews)
+
+    if debug:
+        print(f"[Reviews for {hotel_name} at {address}]")
+        print(f"[Source: {url}]")
+        print('-' * 40 + "REVIEWS" + '-' * 40)
+        print(f"{result}")
+        print('-' * 89)
+
+    return result
 
 if __name__ == '__main__':
     print(get_location_id_by_name_address_city("Bellagio Hotel &amp; Casino", "3600 Las Vegas Blvd S, Las VegasNevada 89109, Las Vegas, 89109, USA", "Las Vegas"))
