@@ -1,5 +1,10 @@
 # Hotel Reviewer
 
+## Update
+* Add fuzzy search to match hotel's address
+
+* Response "I don't know" when no reviews input
+
 ## Documentation
 * **URL**
 
