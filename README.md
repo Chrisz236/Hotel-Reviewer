@@ -21,7 +21,7 @@
 
     **Optional:**
 
-    `debug=[string]`  (`True` or `False`)
+    `debug=[string]`  (`true` or `false`) default `false`
 
 * **Success Response:**
 
