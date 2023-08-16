@@ -19,6 +19,10 @@
 
     `city=[string]`
 
+    **Optional:**
+
+    `debug=[string]`  (`True` or `False`)
+
 * **Success Response:**
 
   * **Code:** 200 <br />
