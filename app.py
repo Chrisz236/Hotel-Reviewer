@@ -7,10 +7,11 @@
 import os
 import openai
 from flask import Flask, request
-from scraper import get_reviews_by_name_and_address
+from scraper import get_reviews_by_name_address_city
 
 app = Flask(__name__)
 
+debug = True
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/reviews', methods=['GET'])
@@ -24,9 +25,11 @@ def summary():
     """
     hotel_name = request.args.get('hotel', '')
     address = request.args.get('address', '')
-    reviews = get_reviews_by_name_and_address(hotel_name, address)
+    city = request.args.get('city', '')
+    reviews = get_reviews_by_name_address_city(hotel_name, address, city)
 
-    print(f"[Reviews for {hotel_name}]\n{reviews}")
+    if debug:
+        print(f"[Reviews for {hotel_name} at {address}]\n{reviews}")
 
     return review_summary(reviews)
 
@@ -65,3 +68,13 @@ if __name__ == '__main__':
         port=4878,
         debug=True
     )
+
+"""
+updated logic: 
+1. get 10 locations by name
+2. filter the location only at given city first
+3. fuzzy matching given address and list of locations address
+4. pick the closest one and return its location_id
+5. get reviews
+6. summarize
+"""
