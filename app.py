@@ -7,7 +7,7 @@
 import os
 import openai
 from flask import Flask, request
-from scraper import get_reviews_by_name
+from scraper import get_reviews_by_name_and_address
 
 app = Flask(__name__)
 
@@ -23,7 +23,11 @@ def summary():
             single paragraph of summary
     """
     hotel_name = request.args.get('hotel', '')
-    reviews = get_reviews_by_name(hotel_name)
+    address = request.args.get('address', '')
+    reviews = get_reviews_by_name_and_address(hotel_name, address)
+
+    print(f"[Reviews for {hotel_name}]\n{reviews}")
+
     return review_summary(reviews)
 
 def review_summary(reviews):
@@ -45,7 +49,7 @@ def review_summary(reviews):
         messages=[
             {
                 "role": "system",
-                "content": "You are a highly skilled AI trained in language comprehension and summarization about few hotel's review from different sources. I would like you to read the following reviews and summarize it into a concise single review about this place. Aim to retain the most important points, providing a coherent and readable summary that could help a person understand the pros and cons of this place and avoid using [some people say xxx, other people say xxx], but like you have been there on your own. Please avoid unnecessary details or tangential points."
+                "content": "You are a highly skilled in summarizing content, you will provided with customers reviews about specific hotels. Your job is to summarize the content to one paragraph without complementing any additional information. If no content is provided, you are to respond simple I don't know message."
             },
             {
                 "role": "user",
