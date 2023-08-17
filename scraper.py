@@ -95,7 +95,7 @@ def get_reviews_by_name_address_city(hotel_name, address, city):
     result = "\n\n".join(reviews)
 
     if debug:
-        print(f"[Reviews for {hotel_name} at {address}]")
-        print(f"[Source: {url}]")
+        print(f"\033[92m[Reviews for {hotel_name} at {address}]\033[0m")
+        print(f"\033[92m[Source: {url}]\033[0m")
 
     return result
