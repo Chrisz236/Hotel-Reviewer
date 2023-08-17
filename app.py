@@ -37,6 +37,7 @@ def summary():
     
     return review_summary(reviews)
 
+
 def review_summary(reviews):
     """Summarize reviews from TripAdvisor.com
 
@@ -67,19 +68,10 @@ def review_summary(reviews):
 
     return response['choices'][0]['message']['content']
 
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
         port=4878,
         debug=True
     )
-
-"""
-updated logic: 
-1. get 10 locations by name
-2. filter the location only at given city first
-3. fuzzy matching given address and list of locations address
-4. pick the closest one and return its location_id
-5. get reviews
-6. summarize
-"""
