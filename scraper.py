@@ -6,14 +6,15 @@
 # Description: Send request to TripAdvisor website and get first 10 reviews
 
 import os
+import openai
 import requests
 from urllib.parse import quote, unquote
 from bs4 import BeautifulSoup
-from rapidfuzz import fuzz
 
 debug = True
 
 TRIP_ARVISOR_API_KEY = os.getenv("TRIP_ADVISOR_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def get_location_id_by_name_address_city(name, address, city):
     """Get location_id of given hotel name
@@ -42,34 +43,26 @@ def get_location_id_by_name_address_city(name, address, city):
     # This JSON contains up to 10 results from the query
     # Iterate list of JSON and fuzzy match the hotel that matches our address
 
-    location_id = ""
-    address_match_score = 0
     address = unquote(address)
 
-    for i in range(len(json_data["data"])):
-        # if name exactly match and address is similar
-        print(fuzz.ratio(name.lower(), json_data["data"][i]["name"].lower()))
-        if fuzz.ratio(name.lower(), json_data["data"][i]["name"].lower()) > 88:
+    # Smart semantic search for locations use GPT
+    # Better performance than using classic fuzzy match
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0,
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a AI assistant trained and skilled in help people finding if two address are same. You will be provided 10 places with name, city, address and location_id, also a target place to found in this list. You task is to find the BEST match of given target place in list and return its location_id."
+            },
+            {
+                "role": "user",
+                "content": f"Your need to find: {name} at city: {city}, with address: {address} from the following list:\n{json_data}\n\nYou should ONLY return the location_id itself, without any other word."
+            }
+        ]
+    )
 
-            print("[Hotel name exactly matched! Now checking address similarity]")
-            print("[Address 1] " + json_data["data"][i]["address_obj"]["street1"].lower())
-            print("[Address 2] " + address.lower())
-            similarity = fuzz.partial_ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
-            print("[Address similarity score]: " + str(similarity))
-
-            if "street1" in json_data["data"][i]["address_obj"] and similarity > 80:
-                location_id = json_data["data"][i]["location_id"]
-                break
-
-        # no name likely matched, search by address similarity
-        if "city" in json_data["data"][i]["address_obj"] and json_data["data"][i]["address_obj"]["city"].lower() == city.lower():
-            similarity = fuzz.partial_ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
-            # pick the most similar location
-            if similarity > address_match_score:
-                location_id = json_data["data"][i]["location_id"]
-                address_match_score = similarity
-
-    return location_id
+    return response['choices'][0]['message']['content']
 
 
 def get_reviews_by_name_address_city(hotel_name, address, city):
