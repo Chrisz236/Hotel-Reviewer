@@ -94,6 +94,15 @@ def get_reviews_by_name_address_city(hotel_name, address, city):
 
     result = "\n\n".join(reviews)
 
+    # sanitize the reviews
+    to_remove = """This review is the subjective opinion of a Tripadvisor member and not of Tripadvisor LLC. Tripadvisor performs checks on reviews as part of our industry-leading trust & safety standards. Read our
+transparency report
+to learn more."""
+    result = result.replace(to_remove, "")
+
+    to_remove = "This response is the subjective opinion of the management representative and not of Tripadvisor LLC."
+    result = result.replace(to_remove, "")
+
     if debug:
         print(f"\033[92m[Reviews for {hotel_name} at {address}]\033[0m")
         print(f"\033[92m[Source: {url}]\033[0m")
