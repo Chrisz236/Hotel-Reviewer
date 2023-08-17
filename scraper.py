@@ -86,9 +86,6 @@ def get_reviews_by_name_address_city(hotel_name, address, city):
     if debug:
         print(f"[Reviews for {hotel_name} at {address}]")
         print(f"[Source: {url}]")
-        print('-' * 40 + "REVIEWS" + '-' * 40)
-        print(f"{result}")
-        print('-' * 89)
 
     return result
 
