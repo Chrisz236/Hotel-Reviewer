@@ -1,9 +1,22 @@
 # Hotel Reviewer
 
-## Update
-* Add fuzzy search to match hotel's address
+> A smart search API
 
-* Response "I don't know" when no reviews input
+## Highlight
+
+Enhanced Hotel Search with Large Language Models (LLMs)
+
+## Background
+
+In traditional search, if we want to compare if two string of name, or address is same, we usually do Fuzzy matching. We will compute the Levenshtein Distance (LD) of two strings and see if it looks same (literally)
+
+However, this approach become less accurate when we want know if two name or address is same. For example: `Delano Las Vegas at Mandalay Bay` and string `Delano Las Vegas` has only `66.6%` similarity on LD but as human, we can tell it is same place
+
+Similarly, two address are also considered same even if they are different on spell. As the human we know `123 ABC st. S` is same as `123 South ABC street` but LD shows us this two address has only `60.6%` similarity with is likely not make computer consider they are same.
+
+Thus, we need to find out a way to actually understand two strings, like human, tells us if they are the same (semantically)
+
+By using Large Language Models, we can easily determine two name, or address are the same with higher accuracy. It is perfect to deal with unformatted data source and perform the semantic match from dataset.
 
 ## Documentation
 * **URL**
