@@ -56,7 +56,7 @@ def review_summary(reviews):
         messages=[
             {
                 "role": "system",
-                "content": "You are a highly skilled in summarizing content, you will provided with customers reviews about specific hotels. Your job is to summarize the content to one paragraph without complementing any additional information. If no content is provided, you are to respond simple I don't know message."
+                "content": "You are a highly skilled in summarizing content, you will provided with customers reviews about specific hotels. Your job is to summarize the content to one paragraph without complementing any additional information. If no reviews shows below, response No Data Available."
             },
             {
                 "role": "user",
@@ -64,6 +64,7 @@ def review_summary(reviews):
             }
         ]
     )
+
     return response['choices'][0]['message']['content']
 
 if __name__ == '__main__':
