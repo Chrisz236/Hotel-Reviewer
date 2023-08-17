@@ -37,15 +37,28 @@ def get_location_id_by_name_address_city(name, address, city):
     response = requests.get(url, headers=headers)
     json_data = response.json()
 
+    # print(json_data)
+
     # This JSON contains up to 10 results from the query
     # Iterate list of JSON and fuzzy match the hotel that matches our address
 
     location_id = ""
     address_match_score = 0
+    address = unquote(address)
 
     for i in range(len(json_data["data"])):
+        # if name exactly match and address is similar
+        if name.lower() == json_data["data"][i]["name"].lower():
+            print("[Address 1] " + json_data["data"][i]["address_obj"]["street1"].lower())
+            print("[Address 2] " + address.lower())
+            print("[Address similarity score]: " + str(fuzz.partial_ratio(json_data["data"][i]["address_obj"]["street1"].lower(), address.lower())))
+
+            if "street1" in json_data["data"][i]["address_obj"] and fuzz.ratio(json_data["data"][i]["address_obj"]["street1"].lower(), address.lower()) > 90:
+                location_id = json_data["data"][i]["location_id"]
+                break
+
         # quick filter for city match
-        if json_data["data"][i]["address_obj"]["city"].lower() == city.lower():
+        if "city" in json_data["data"][i]["address_obj"] and json_data["data"][i]["address_obj"]["city"].lower() == city.lower():
             similarity = fuzz.ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
             if similarity > address_match_score:
                 location_id = json_data["data"][i]["location_id"]
@@ -90,4 +103,4 @@ def get_reviews_by_name_address_city(hotel_name, address, city):
     return result
 
 if __name__ == '__main__':
-    print(get_location_id_by_name_address_city("Bellagio Hotel &amp; Casino", "3600 Las Vegas Blvd S, Las VegasNevada 89109, Las Vegas, 89109, USA", "Las Vegas"))
+    print(get_location_id_by_name_address_city("NoMad Las Vegas", "3772 S Las Vegas Blvd, Las Vegas", "Las Vegas"))
