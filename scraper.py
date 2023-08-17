@@ -99,6 +99,3 @@ def get_reviews_by_name_address_city(hotel_name, address, city):
         print(f"[Source: {url}]")
 
     return result
-
-if __name__ == '__main__':
-    print(get_location_id_by_name_address_city("NoMad Las Vegas", "3772 S Las Vegas Blvd, Las Vegas", "Las Vegas"))
