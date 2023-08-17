@@ -48,18 +48,23 @@ def get_location_id_by_name_address_city(name, address, city):
 
     for i in range(len(json_data["data"])):
         # if name exactly match and address is similar
-        if name.lower() == json_data["data"][i]["name"].lower():
+        print(fuzz.ratio(name.lower(), json_data["data"][i]["name"].lower()))
+        if fuzz.ratio(name.lower(), json_data["data"][i]["name"].lower()) > 88:
+
+            print("[Hotel name exactly matched! Now checking address similarity]")
             print("[Address 1] " + json_data["data"][i]["address_obj"]["street1"].lower())
             print("[Address 2] " + address.lower())
-            print("[Address similarity score]: " + str(fuzz.partial_ratio(json_data["data"][i]["address_obj"]["street1"].lower(), address.lower())))
+            similarity = fuzz.partial_ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
+            print("[Address similarity score]: " + str(similarity))
 
-            if "street1" in json_data["data"][i]["address_obj"] and fuzz.ratio(json_data["data"][i]["address_obj"]["street1"].lower(), address.lower()) > 90:
+            if "street1" in json_data["data"][i]["address_obj"] and similarity > 80:
                 location_id = json_data["data"][i]["location_id"]
                 break
 
-        # quick filter for city match
+        # no name likely matched, search by address similarity
         if "city" in json_data["data"][i]["address_obj"] and json_data["data"][i]["address_obj"]["city"].lower() == city.lower():
-            similarity = fuzz.ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
+            similarity = fuzz.partial_ratio(json_data["data"][i]["address_obj"]["address_string"].lower(), address.lower())
+            # pick the most similar location
             if similarity > address_match_score:
                 location_id = json_data["data"][i]["location_id"]
                 address_match_score = similarity
