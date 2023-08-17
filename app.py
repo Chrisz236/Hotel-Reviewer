@@ -25,8 +25,16 @@ def summary():
     hotel_name = request.args.get('hotel', '')
     address = request.args.get('address', '')
     city = request.args.get('city', '')
+    debug = request.args.get('debug', 'false')
+
     reviews = get_reviews_by_name_address_city(hotel_name, address, city)
 
+    # Print reviews in console if debug is enabled
+    if debug.lower() == 'true':
+        print('-' * 40 + " REVIEWS " + '-' * 40)
+        print(reviews)
+        print('-' * 89)
+    
     return review_summary(reviews)
 
 def review_summary(reviews):
